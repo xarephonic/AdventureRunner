@@ -1,12 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerMovement : MonoBehaviour {
 
 	public bool grounded;
+	public List<GameObject> touchedGround = new List<GameObject>();
+
 
 	public bool jumpAvailable = true;
-	float jumpCooldownAmount = 1.0f;
+	float jumpCooldownAmount = 0.5f;
 
 	IEnumerator jumpCooldown(){
 		Debug.Log("invoke started");
@@ -19,8 +22,25 @@ public class PlayerMovement : MonoBehaviour {
 	{
 		if(col.gameObject.tag == "ground")
 		{
-			grounded = true;
+			if(!touchedGround.Contains(col.gameObject))
+				touchedGround.Add(col.gameObject);
 		}
+	}
+
+	void OnCollisionExit2D(Collision2D col)
+	{
+		if(col.gameObject.tag == "ground")
+		{
+			if(touchedGround.Contains(col.gameObject))
+				touchedGround.Remove(col.gameObject);
+		}
+	}
+
+	void UpdateGroundedStatus(){
+		if(touchedGround.Count > 0)
+			grounded = true;
+		else
+			grounded = false;
 	}
 
 
@@ -30,6 +50,7 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		UpdateGroundedStatus();
 		if(Input.touchCount > 0 && grounded && jumpAvailable)
 		{
 			rigidbody2D.velocity = new Vector2(0,6);
