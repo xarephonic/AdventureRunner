@@ -54,13 +54,13 @@ public class QuestGiver : MonoBehaviour {
 
 	void QuestWindow(int id){
 		GUI.Label(new Rect(10,25,180,100),"Hello,"+"\n"+"Please send my regards to my pink friend."+"\n"+"Thank you!");
-		if(GUI.Button(new Rect(50,150,50,50),"Yes"))
+		if(GUI.Button(new Rect(0,150,100,50),"Accept"))
 		{
 			questTaken = true;
 			showQuestInterface = false;
 			SpeedControl.currentSpeed = 8;
 		}
-		if(GUI.Button(new Rect(100,150,50,50),"No"))
+		if(GUI.Button(new Rect(100,150,100,50),"Decline"))
 		{
 			showQuestInterface = false;
 			SpeedControl.currentSpeed = 8;
