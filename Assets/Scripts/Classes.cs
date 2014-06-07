@@ -46,6 +46,7 @@ namespace fk.adventureRunner{
 			{
 				return hp+strength;
 			}
+			set{}
 		}
 		public int currentHp;
 		public int armor;
@@ -55,11 +56,12 @@ namespace fk.adventureRunner{
 		{
 			if(unusedAbilityPoints == 0)
 			{
-				throw new UnityException("not enough points")
+				throw new UnityException("not enough points");
 			}
 			else
 			{
-				switch(ability){
+				switch(ability)
+				{
 				case 0:
 					strength++;
 					break;
@@ -103,9 +105,114 @@ namespace fk.adventureRunner{
 		}
 
 		public Inventory playerInv;
+		public Item helmet
+		{
+			get
+			{
+				return helmet;
+			}
+			set
+			{
+				if(value.armorSlot != "helmet")
+					throw new UnityException("wrong item slot");
+				else
+					helmet = value;
+				updateTotalArmor();
+			}
+		}
+		public Item torso
+		{
+			get
+			{
+				return torso;
+			}
+			set
+			{
+				if(value.armorSlot != "torso")
+					throw new UnityException("wrong item slot");
+				else
+					torso = value;
+				updateTotalArmor();
+			}
+		}
+		public Item boots
+		{
+			get
+			{
+				return boots;
+			}
+			set
+			{
+				if(value.armorSlot != "boots")
+					throw new UnityException("wrong item slot");
+				else
+					boots = value;
+				updateTotalArmor();
+			}
+		}
+		public Item weapon
+		{
+			get
+			{
+				return weapon;
+			}
+			set
+			{
+				if(value.type != "weapon")
+					throw new UnityException("wrong item slot");
+				else
+					weapon = value;
+			}
+		}
+		public Item shield
+		{
+			get
+			{
+				return shield;
+			}
+			set
+			{
+				if(value.armorSlot != "shield")
+					throw new UnityException("wrong item slot");
+				else
+					shield = value;
+				updateTotalArmor();
+			}
+		}
+
+		public void updateTotalArmor(){
+			armor = helmet.armorValue + torso.armorValue + boots.armorValue + shield.armorValue;
+		}
 
 
+	}
 
+	public class EnemyObject{
+
+		public string name;
+		public int hp
+		{
+			get
+			{
+				return hp;
+			}
+			set
+			{
+				hp = value;
+				if(hp <= 0)
+					alive = false;
+			}
+		}
+		public bool alive;
+		public int armor;
+		public int damage;
+		public float currentAttackCharge;
+		public float attackCharge;
+
+		public void chargeAttack(){
+			currentAttackCharge += Time.deltaTime;
+			currentAttackCharge = Mathf.Clamp(currentAttackCharge,0,attackCharge);
+		}
 	}
 
 	public class Quest{
@@ -132,6 +239,8 @@ namespace fk.adventureRunner{
 
 		public int armorValue;
 		public int damageValue;
+
+		public string armorSlot;
 
 
 
